@@ -1,5 +1,4 @@
-
-
+# %%
 import numpy as np
 import pandas as pd
 import os
@@ -87,14 +86,14 @@ for f in read_files_csv:
 filtered_csvs = obt.list_subdirs(extracted_data)
 len(filtered_csvs)
 
-# %%
 
 print('making raster plots')
 
 
 def clean_data(df):
-    cols = ['Left nose ITI timestamps', 'Left nose cue reward timestamps',
-            'Right nose ITI timestamps', 'Right nose cue reward timestamps']
+    cols = ['Left nose ITI timestamps', 'Left nose cue reward timestamps', 'Left nose cue unrewarded timestamps',
+            'Right nose ITI timestamps', 'Right nose cue reward timestamps',  'Right nose cue unrewarded timestamps',
+            'Rewarded PE timestamps', 'Unrewarded PE timestamps']
     return (df[cols]
             .rename(columns=lambda c: c.replace(' ', '_').lower())
             .fillna(-1000)
@@ -109,11 +108,18 @@ def make_raster(path):
     behav = clean_data(df)
 
     arr = np.array(behav)
-    fig, ax = plt.subplots(figsize=(10, 5))
+    fig, ax = plt.subplots(figsize=(16, 8))
     fig.suptitle(
         f"date: {df['Start Date'][0]}   mouse: {df['Subject'][0].astype(int)}   program {df['MSN'][0]}", fontsize=20)
 
-    colors1 = ['black', 'red', 'green', 'blue']
+    colors1 = ['#224772',
+               '#245ac4',
+               '#416278',
+               '#54fb82',
+               '#990639',
+               '#a7fcf1',
+               '#be0f6f',
+               '#ce7f15']
     behavior = [b.replace('_', ' ').capitalize() for b in behav.index]
 
     ax.eventplot(
@@ -126,11 +132,10 @@ def make_raster(path):
     )
 
     ax.tick_params(length=0)
-    ax.set_yticks([0, 1, 2, 3])
+    ax.set_yticks(range(len(behavior)))
     ax.set_yticklabels(behavior, fontsize=16)
     ax.set_xlim(0,)
-    ax.set_xticklabels([0, 1000, 2000, 3000, 4000], fontsize=16)
-    ax.set_xlabel("Time (s)", fontsize=16)
+    ax.set_xticklabels([])
 
     for spine in ['top', 'right', 'left', 'bottom']:
         ax.spines[spine].set_visible(False)
@@ -142,6 +147,8 @@ def make_raster(path):
     plt.savefig(f"{raster_svgs}\\{basename}.svg",
                 dpi=300,
                 transparent=True)
+
+    plt.tight_layout()
 
 
 for f in filtered_csvs:
