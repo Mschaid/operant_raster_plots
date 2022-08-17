@@ -1,3 +1,4 @@
+# %%
 import numpy as np
 import pandas as pd
 import os
@@ -107,7 +108,7 @@ def make_raster(path):
     behav = clean_data(df)
 
     arr = np.array(behav)
-    fig, ax = plt.subplots(figsize=(16, 8))
+    fig, ax = plt.subplots(figsize=(24, 12))
     fig.suptitle(
         f"date: {df['Start Date'][0]}   mouse: {df['Subject'][0].astype(int)}   program {df['MSN'][0]}", fontsize=20)
 
@@ -119,7 +120,8 @@ def make_raster(path):
                '#a7fcf1',
                '#be0f6f',
                '#ce7f15']
-    behavior = [b.replace('_', ' ').capitalize() for b in behav.index]
+    behavior = [b.replace('_', ' ').capitalize().strip(
+        'timestamps') for b in behav.index]
 
     ax.eventplot(
         arr,
@@ -132,7 +134,7 @@ def make_raster(path):
 
     ax.tick_params(length=0)
     ax.set_yticks(range(len(behavior)))
-    ax.set_yticklabels(behavior, fontsize=16)
+    ax.set_yticklabels(behavior, fontsize=12)
     ax.set_xlim(0,)
     ax.set_xticklabels([])
 
