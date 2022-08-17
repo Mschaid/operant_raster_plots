@@ -7,7 +7,7 @@ import OpperantBehaviorTools as obt
 import json
 import re
 import matplotlib.pyplot as plt
-import seaborn as sns
+
 
 abspath = input(
     'Hi Dr. Jilly, please enter the path to the folder you wish to analyze: ')
@@ -109,7 +109,7 @@ def make_raster(path):
     behav = clean_data(df)
 
     arr = np.array(behav)
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(10, 5))
     fig.suptitle(
         f"date: {df['Start Date'][0]}   mouse: {df['Subject'][0].astype(int)}   program {df['MSN'][0]}", fontsize=20)
 
@@ -131,7 +131,10 @@ def make_raster(path):
     ax.set_xlim(0,)
     ax.set_xticklabels([0, 1000, 2000, 3000, 4000], fontsize=16)
     ax.set_xlabel("Time (s)", fontsize=16)
-    sns.despine(ax=ax, left=True, bottom=True)
+
+    for spine in ['top', 'right', 'left', 'bottom']:
+        ax.spines[spine].set_visible(False)
+
     plt.rcParams['svg.fonttype'] = 'none'  # save text as text in svg
     plt.savefig(f"{raster_tiffs}\\{basename}.tiff",
                 dpi=300,
