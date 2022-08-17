@@ -1,0 +1,27 @@
+{ 
+"A": "Left nose ITI timestamps",
+"B": "Left nose cue reward timestamps",
+"C": "Right nose ITI timestamps",
+"D": "Right nose cue reward timestamps",
+"E": "Count of trials",
+"F": "List of ITIs",
+"G": "Rewarded PE timestamps",
+"H": "Left nose cue unrewarded timestamps",
+"I": "Right nose cue unrewarded timestamps",
+"J": "Unrewarded PE timestamps",
+"K": "Timer for timestamps",
+"L": "Block keeper timestamps",
+"M": "nrewarded PE",
+"N": "cue Unrewarded Right NP",
+"O": "Right Rewards",
+"P": "Port Entries",
+"Q": "Cue Unrewarded Left NP",
+"R": "Right nosepokes",
+"S": "left rewards",
+"T": "array for times/clocks",
+"U": "Block number",
+"V": "ITI Time",
+"W": "Left nose pokes",
+"X": "Array TTL state keepers"
+
+}

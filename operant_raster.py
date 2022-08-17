@@ -1,4 +1,5 @@
-# %%
+
+
 import numpy as np
 import pandas as pd
 import os
@@ -8,14 +9,17 @@ import re
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-abspath = input(r"R:\Mike\Behavior\JS_for_raster\test_data_fold")
-print('creating directories')
+abspath = input(
+    'Hi Dr. Jilly, please enter the path to the folder you wish to analyze: ')
+# abspath = r'R:\Mike\Behavior\JS_for_raster\test_data_fold'
 
 # directory that contains raw data directories
 raw_data_path = os.path.join(abspath, 'raw_data')
 
 # create new directoy data to store csvs+
 extracted_data = obt.create_new_dir(abspath, 'extracted_data')
+raster_tiffs = obt.create_new_dir(abspath, 'raster_tiffs')
+raster_svgs = obt.create_new_dir(abspath, 'raster_svgs')
 
 # creates new directory to save compiled data that is processed and analyzed
 
@@ -62,11 +66,14 @@ def rename_params(path):
     df = pd.read_csv(path)
     if 'Right' in df['MSN'][0]:
         df = df.rename(columns=parameter['left_right_liq'])
+        df.to_csv(path)
+
     elif 'Center' in df['MSN'][0]:
         df = df.rename(columns=parameter['center_liq'])
+        df.to_csv(path)
+
     else:  # if parameter file is not found, the csv file is deleted
         os.remove(path)
-    df.to_csv(path)
 
 
 parameter = {get_names(f): read_params(f)
@@ -74,16 +81,15 @@ parameter = {get_names(f): read_params(f)
 
 read_files_csv = obt.list_subdirs(extracted_data)
 
-
 for f in read_files_csv:
-    print(f)
     rename_params(f)
 
-# list of csvs I had to manually enter bc med didnt save
-
+filtered_csvs = obt.list_subdirs(extracted_data)
+len(filtered_csvs)
 
 # %%
-df = pd.read_csv(read_files_csv[5])
+
+print('making raster plots')
 
 
 def clean_data(df):
@@ -96,20 +102,45 @@ def clean_data(df):
             )
 
 
-behav = clean_data(df)
-behav.columns
-# %%
-# TODO: need to figure out how to get event names and label plot
-arr = np.array(behav)
-fig, ax = plt.subplots()
-ax.eventplot(
-    arr,
-    orientation="horizontal",
-    linelengths=0.5,
-    linewidth=1,
-    rasterized=True,
-)
-ax.set_xlim(0,)
-plt.show()
+def make_raster(path):
+    basename = os.path.basename(path).split('.')[0]
+    df = pd.read_csv(path)
 
+    behav = clean_data(df)
+
+    arr = np.array(behav)
+    fig, ax = plt.subplots(figsize=(12, 6))
+    fig.suptitle(
+        f"date: {df['Start Date'][0]}   mouse: {df['Subject'][0].astype(int)}   program {df['MSN'][0]}", fontsize=20)
+
+    colors1 = ['black', 'red', 'green', 'blue']
+    behavior = [b.replace('_', ' ').capitalize() for b in behav.index]
+
+    ax.eventplot(
+        arr,
+        orientation="horizontal",
+        linelengths=0.5,
+        linewidth=.75,
+        color=colors1,
+        rasterized=True,
+    )
+
+    ax.tick_params(length=0)
+    ax.set_yticks([0, 1, 2, 3])
+    ax.set_yticklabels(behavior, fontsize=16)
+    ax.set_xlim(0,)
+    ax.set_xticklabels([0, 1000, 2000, 3000, 4000], fontsize=16)
+    ax.set_xlabel("Time (s)", fontsize=16)
+    sns.despine(ax=ax, left=True, bottom=True)
+    plt.rcParams['svg.fonttype'] = 'none'  # save text as text in svg
+    plt.savefig(f"{raster_tiffs}\\{basename}.tiff",
+                dpi=300,
+                transparent=True)
+    plt.savefig(f"{raster_svgs}\\{basename}.svg",
+                dpi=300,
+                transparent=True)
+
+
+for f in filtered_csvs:
+    make_raster(f)
 # %%
