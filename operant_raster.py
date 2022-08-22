@@ -8,9 +8,9 @@ import re
 import matplotlib.pyplot as plt
 
 
-# abspath = input(
-# 'Hi Dr. Jilly, please enter the path to the folder you wish to analyze: ')
-abspath = r'R:\Mike\Behavior\JS_for_raster\test_data_fold'
+abspath = input(
+    'Hi Dr. Jilly, please enter the path to the folder you wish to analyze: ')
+# abspath = r'R:\Mike\Behavior\JS_for_raster\test_data_fold'
 
 # directory that contains raw data directories
 raw_data_path = os.path.join(abspath, 'raw_data')
