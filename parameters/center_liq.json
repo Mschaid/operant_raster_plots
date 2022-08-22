@@ -14,11 +14,14 @@
     "N": "Cue Unrewarded Right NP",
     "O": "Right Rewards",
     "P": "Port Entries",
-    "Q": "Cue Unrewarded Left NP",    
+    "Q": "Cue Unrewarded Left NP",  
+    "R": "trial initiation",  
     "S": "left rewards",
     "T": "Array for times/clocks",
     "V": "ITI Time",
+    "W": "tone",  
     "X": "Array TTL state keepers",
     "Y": "List for Right or Left Trial",
     "Z": "Left or Right Trial"
+
 }

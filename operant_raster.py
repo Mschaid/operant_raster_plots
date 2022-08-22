@@ -8,9 +8,9 @@ import re
 import matplotlib.pyplot as plt
 
 
-abspath = input(
-    'Hi Dr. Jilly, please enter the path to the folder you wish to analyze: ')
-# abspath = r'R:\Mike\Behavior\JS_for_raster\test_data_fold'
+# abspath = input(
+# 'Hi Dr. Jilly, please enter the path to the folder you wish to analyze: ')
+abspath = r'R:\Mike\Behavior\JS_for_raster\test_data_fold'
 
 # directory that contains raw data directories
 raw_data_path = os.path.join(abspath, 'raw_data')
@@ -56,8 +56,9 @@ for f in med_files:
 print("renaming parameters")
 
 
-def get_names(f): return os.path.basename(f).split(
-    '.')[0]  # function to get names of parameters
+def get_names(f):
+    return os.path.basename(f).split(
+        '.')[0]  # function to get names of parameters
 
 
 def rename_params(path):
@@ -93,9 +94,10 @@ print('making raster plots')
 def clean_data(df):
     cols = ['Left nose ITI timestamps', 'Left nose cue reward timestamps', 'Left nose cue unrewarded timestamps',
             'Right nose ITI timestamps', 'Right nose cue reward timestamps',  'Right nose cue unrewarded timestamps',
-            'Rewarded PE timestamps', 'Unrewarded PE timestamps']
+            'Rewarded PE timestamps', 'Unrewarded PE timestamps', 'tone', 'trial initiation']
     return (df[cols]
             .rename(columns=lambda c: c.replace(' ', '_').lower())
+            .replace(0, np.nan)
             .fillna(-1000)
             .transpose()
             )
@@ -119,7 +121,9 @@ def make_raster(path):
                '#990639',
                '#a7fcf1',
                '#be0f6f',
-               '#ce7f15']
+               '#ce7f15',
+               '#884772',
+               '#224772']
     behavior = [b.replace('_', ' ').capitalize().strip(
         'timestamps') for b in behav.index]
 
